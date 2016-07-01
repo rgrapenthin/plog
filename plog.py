@@ -89,7 +89,7 @@ class Logger():
             raise CleanShutdownRequest() 
 
     @staticmethod
-    def warning( msg, out=None, trace=True ):
+    def warning( msg, out=None, trace=False ):
         if out is None:
             out = Logger.out
 
@@ -104,9 +104,14 @@ class Logger():
         Logger.print_lock.release()
 
     @staticmethod
-    def serious_warning( msg, out=None ):
+    def serious_warning( msg, out=None, trace=False ):
         if out is None:
             out = Logger.out
+        
+        if trace:
+            out.write('-'*60 +"\n")
+            traceback.print_exc(file=out)
+            out.write('-'*60 +"\n")
 
         Logger.print_lock.acquire()
         out.write( "\n"+"#"*80+"\n")
